@@ -17,6 +17,23 @@
     overflow-y: hidden;
     color: black;
   }
+  #controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1rem;
+  }
+  #controls button {
+    color: #000;
+    background-color: #fff;
+    margin: 1rem;
+    border: none;
+    font-size: .8rem;
+    padding: .5rem 1rem;
+  }
+  :-webkit-full-screen #controls {
+    display: none;
+  }
   #mainEmotionWrapper {
     display: table;
     position: absolute;
@@ -71,8 +88,37 @@
     color: white;
     font-size: 20vw !important;
   }
-
   </style>
+
+  <script>
+    var elem = document.documentElement;
+
+    /* View in fullscreen */
+    function openFullscreen() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+    }
+
+    /* Close fullscreen */
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+      }
+    }
+  </script>
 
 </head>
 <body>
@@ -88,6 +134,9 @@
     </div>
 
     <div id="mainEmotionWrapper">
+      <div id="controls">
+          <button onClick="openFullscreen()">Full screen</button>
+      </div>
       <div id="mainEmotion"></div>
     </div>
     
