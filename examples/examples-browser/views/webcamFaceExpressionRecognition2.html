@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="face-api.js"></script>
+  <script src="js/commons.js"></script>
+  <script src="js/drawing.js"></script>
+  <script src="js/faceDetectionControls.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  <script>
+      window.onload = function () {
+      
+      var dps_neutral = []; 
+      var dps_happy = []; 
+      var chart = new CanvasJS.Chart("chartContainer", {
+        title :{
+          // text: "Dynamic Data"
+        },
+        axisY: {
+          includeZero: true,
+          minimum: 0,
+          maximum: 1
+        },      
+        data: [{
+          type: "line",
+          dataPoints: dps_neutral
+        },{
+          type: "line",
+          dataPoints: dps_happy
+        }]
+      });
+      
+      var xVal = 0;
+      var yVal = 1; 
+      var updateInterval = 200;
+      var dataLength = 20; // number of dataPoints visible at any point
+      
+      var updateChart = function (count) {
+      
+        count = count || 1;
+      
+        for (var j = 0; j < count; j++) {
+
+          // add point: neutral
+          yVal = parseFloat($("#emotion_neutral").val());
+          dps_neutral.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: happy
+          yVal = parseFloat($("#emotion_happy").val());
+          dps_happy.push({
+            x: xVal,
+            y: yVal
+          });
+
+    // 0: neutral
+    // 1: sad
+    // 2: angry
+    // 3: happy
+    // 4: surprised
+    // 5: disgusted
+    // 6: fearful
+
+          xVal++;
+
+        }
+      
+        if (dps_neutral.length > dataLength) {
+          dps_neutral.shift();
+          dps_happy.shift();
+        }
+      
+        chart.render();
+      };
+      
+      updateChart(dataLength);
+      setInterval(function(){updateChart()}, updateInterval);
+      
+      }
+      </script>
+
+</head>
+<body>
+  <div id="navbar"></div>
+  <div class="center-content page-container">
+
+    <div class="progress" id="loader">
+      <div class="indeterminate"></div>
+    </div>
+    <div style="position: relative" class="margin">
+      <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
+      <canvas id="overlay" />
+    </div>
+
+    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    
+    Neutral: <input type="text" id="emotion_neutral" value="" /><br />
+    Sad: <input type="text" id="emotion_sad" value="" /><br />
+    Angry: <input type="text" id="emotion_happy" value="" /><br />
+    Happy: <input type="text" id="emotion_angry" value="" /><br />
+    Surprised: <input type="text" id="emotion_surprised" value="" /><br />
+    Disgusted: <input type="text" id="emotion_disgusted" value="" /><br />
+    Fearful: <input type="text" id="emotion_fearful" value="" />
+
+  </body>
+
+  <script>
+    let forwardTimes = []
+    let withBoxes = true
+
+    function onChangeHideBoundingBoxes(e) {
+      withBoxes = !$(e.target).prop('checked')
+    }
+
+    function updateTimeStats(timeInMs) {
+      forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30)
+      const avgTimeInMs = forwardTimes.reduce((total, t) => total + t) / forwardTimes.length
+      $('#time').val(`${Math.round(avgTimeInMs)} ms`)
+      $('#fps').val(`${faceapi.round(1000 / avgTimeInMs)}`)
+    }
+
+    async function onPlay() {
+      const videoEl = $('#inputVideo').get(0)
+
+      if(videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+        return setTimeout(() => onPlay())
+
+      const options = getFaceDetectorOptions()
+      const ts = Date.now()
+      const result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions()
+
+      updateTimeStats(Date.now() - ts)
+
+      var emotion = Array();
+      if(result) {
+        for(i=0;i<7;i++) {
+          var expression = result.expressions[i].expression;
+          var probability = result.expressions[i].probability;
+          $("#emotion_" + expression).val(probability);
+        }
+      }
+      console.log(result);
+
+      if (result) {
+        drawExpressions(videoEl, $('#overlay').get(0), [result], withBoxes)
+      }
+
+      setTimeout(() => onPlay())
+    }
+
+    async function run() {
+      // load face detection and face expression recognition models
+      await changeFaceDetector(TINY_FACE_DETECTOR)
+      await faceapi.loadFaceExpressionModel('/')
+      changeInputSize(224)
+
+      // try to access users webcam and stream the images
+      // to the video element
+      const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+      const videoEl = $('#inputVideo').get(0)
+      videoEl.srcObject = stream
+    }
+
+    function updateResults() {
+
+    }
+
+    $(document).ready(function() {
+      renderNavBar('#navbar', 'webcam_face_expression_recognition')
+      initFaceDetectionControls()
+      run()
+    })
+  </script>
+</body>
+</html>
