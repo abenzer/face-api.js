@@ -14,7 +14,12 @@
       window.onload = function () {
       
       var dps_neutral = []; 
+      var dps_sad = []; 
+      var dps_angry = []; 
       var dps_happy = []; 
+      var dps_surprised = []; 
+      var dps_disgusted = []; 
+      var dps_fearful = []; 
       var chart = new CanvasJS.Chart("chartContainer", {
         title :{
           // text: "Dynamic Data"
@@ -30,6 +35,21 @@
         },{
           type: "line",
           dataPoints: dps_happy
+        },{
+          type: "line",
+          dataPoints: dps_sad
+        },{
+          type: "line",
+          dataPoints: dps_angry
+        },{
+          type: "line",
+          dataPoints: dps_surprised
+        },{
+          type: "line",
+          dataPoints: dps_disgusted
+        },{
+          type: "line",
+          dataPoints: dps_fearful
         }]
       });
       
@@ -56,14 +76,36 @@
             x: xVal,
             y: yVal
           });
-
-    // 0: neutral
-    // 1: sad
-    // 2: angry
-    // 3: happy
-    // 4: surprised
-    // 5: disgusted
-    // 6: fearful
+          // add point: sad
+          yVal = parseFloat($("#emotion_sad").val());
+          dps_sad.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_angry").val());
+          dps_angry.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_surprised").val());
+          dps_surprised.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_disgusted").val());
+          dps_disgusted.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_fearful").val());
+          dps_fearful.push({
+            x: xVal,
+            y: yVal
+          });
 
           xVal++;
 
@@ -72,6 +114,11 @@
         if (dps_neutral.length > dataLength) {
           dps_neutral.shift();
           dps_happy.shift();
+          dps_sad.shift();
+          dps_angry.shift();
+          dps_disgusted.shift();
+          dps_surprised.shift();
+          dps_fearful.shift();
         }
       
         chart.render();
@@ -144,7 +191,7 @@
           $("#emotion_" + expression).val(probability);
         }
       }
-      console.log(result);
+      // console.log(result);
 
       if (result) {
         drawExpressions(videoEl, $('#overlay').get(0), [result], withBoxes)
