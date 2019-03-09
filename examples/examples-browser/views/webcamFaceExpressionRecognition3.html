@@ -10,125 +10,19 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
-  <script>
-      window.onload = function () {
-      
-      var dps_neutral = []; 
-      var dps_sad = []; 
-      var dps_angry = []; 
-      var dps_happy = []; 
-      var dps_surprised = []; 
-      var dps_disgusted = []; 
-      var dps_fearful = []; 
-      var chart = new CanvasJS.Chart("chartContainer", {
-        title :{
-          // text: "Dynamic Data"
-        },
-        axisY: {
-          includeZero: true,
-          minimum: 0,
-          maximum: 1
-        },      
-        data: [{
-          type: "line",
-          dataPoints: dps_neutral
-        },{
-          type: "line",
-          dataPoints: dps_happy
-        },{
-          type: "line",
-          dataPoints: dps_sad
-        },{
-          type: "line",
-          dataPoints: dps_angry
-        },{
-          type: "line",
-          dataPoints: dps_surprised
-        },{
-          type: "line",
-          dataPoints: dps_disgusted
-        },{
-          type: "line",
-          dataPoints: dps_fearful
-        }]
-      });
-      
-      var xVal = 0;
-      var yVal = 1; 
-      var updateInterval = 200;
-      var dataLength = 50; // number of dataPoints visible at any point
-      
-      var updateChart = function (count) {
-      
-        count = count || 1;
-      
-        for (var j = 0; j < count; j++) {
-
-          // add point: neutral
-          yVal = parseFloat($("#emotion_neutral").val());
-          dps_neutral.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: happy
-          yVal = parseFloat($("#emotion_happy").val());
-          dps_happy.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: sad
-          yVal = parseFloat($("#emotion_sad").val());
-          dps_sad.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: sad
-          yVal = parseFloat($("#emotion_angry").val());
-          dps_angry.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: sad
-          yVal = parseFloat($("#emotion_surprised").val());
-          dps_surprised.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: sad
-          yVal = parseFloat($("#emotion_disgusted").val());
-          dps_disgusted.push({
-            x: xVal,
-            y: yVal
-          });
-          // add point: sad
-          yVal = parseFloat($("#emotion_fearful").val());
-          dps_fearful.push({
-            x: xVal,
-            y: yVal
-          });
-
-          xVal++;
-
-        }
-      
-        if (dps_neutral.length > dataLength) {
-          dps_neutral.shift();
-          dps_happy.shift();
-          dps_sad.shift();
-          dps_angry.shift();
-          dps_disgusted.shift();
-          dps_surprised.shift();
-          dps_fearful.shift();
-        }
-      
-        chart.render();
-      };
-      
-      updateChart(dataLength);
-      setInterval(function(){updateChart()}, updateInterval);
-      
-      }
-      </script>
+  <style type='text/css'>
+  #mainEmotion {
+    font-size: 5rem;
+    color: white;
+    position: fixed;
+    left: 0;
+    z-index: 999;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+  }
+  </style>
 
 </head>
 <body>
@@ -143,8 +37,10 @@
       <canvas id="overlay" />
     </div>
 
-    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <div id="mainEmotion"></div>
+
+    <!-- <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
     
     Neutral: <input type="text" id="emotion_neutral" value="" /><br />
     Sad: <input type="text" id="emotion_sad" value="" /><br />
@@ -183,15 +79,21 @@
 
       updateTimeStats(Date.now() - ts)
 
-      var emotion = Array();
       if(result) {
         for(i=0;i<7;i++) {
           var expression = result.expressions[i].expression;
           var probability = result.expressions[i].probability;
           $("#emotion_" + expression).val(probability);
         }
+        result.expressions.sort(function(a, b){
+          return b.probability-a.probability
+        })
+        
+        var primaryEmotion = result.expressions[0].expression;
+        $("#mainEmotion").html(primaryEmotion);
+
+        // console.log(result);
       }
-      // console.log(result);
 
       if (result) {
         drawExpressions(videoEl, $('#overlay').get(0), [result], withBoxes)
