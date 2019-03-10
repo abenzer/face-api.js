@@ -24,9 +24,6 @@
       var dps_fearful = []; 
       var chart = new CanvasJS.Chart("chartContainer", {
         backgroundColor: "transparent",
-        title: {
-          // text: "Dynamic Data"
-        },
         axisY: {
           includeZero: true,
           minimum: 0,
@@ -115,13 +112,13 @@
         }
       
         if (dps_neutral.length > dataLength) {
-          dps_neutral.shift();
-          dps_happy.shift();
-          dps_sad.shift();
-          dps_angry.shift();
-          dps_disgusted.shift();
-          dps_surprised.shift();
-          dps_fearful.shift();
+          // dps_neutral.shift();
+          // dps_happy.shift();
+          // dps_sad.shift();
+          // dps_angry.shift();
+          // dps_disgusted.shift();
+          // dps_surprised.shift();
+          // dps_fearful.shift();
         }
       
         chart.render();
@@ -144,6 +141,7 @@
     right: 0;
     top: 0;
     font-size: 1rem;
+    z-index: 99999;
   }
   #controls button {
     color: #000;
@@ -173,9 +171,6 @@
     vertical-align: middle;
     text-align: center;
     width: 100%;
-    left: 0;
-    z-index: 999;
-    bottom: 0;
     font-family: 'Thasadith', sans-serif;
   }
   .calm {
@@ -213,8 +208,8 @@
   #graph {
     position: absolute;
     left: 0;
-    bottom: 0;
-    height: 50vh;
+    top: 0;
+    height: 100vh;
     width: 100vw;
     z-index: 9999;
     transition: opacity 1s;
@@ -222,6 +217,9 @@
   }
   #graph.visible {
     display: block;
+  }
+  #graph #chartContainer {
+    height: 50vh !important;
   }
   </style>
 
@@ -274,11 +272,12 @@
     </div>
 
     <div id="mainEmotionWrapper">
-      <div id="controls">
-        <button onClick="toggleGraph()">Toggle graph</button>
-        <button onClick="openFullscreen()">Full screen</button>
-      </div>
       <div id="mainEmotion"></div>
+    </div>
+
+    <div id="controls">
+      <button onClick="toggleGraph()">Toggle graph</button>
+      <button onClick="openFullscreen()">Full screen</button>
     </div>
 
     <div id="graph">
