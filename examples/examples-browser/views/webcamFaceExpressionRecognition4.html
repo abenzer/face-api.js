@@ -128,11 +128,14 @@
   }
   #controls button {
     color: #000;
-    background-color: #fff;
-    margin: 1rem;
+    /* background-color: #fff; */
+    background: transparent;
+    margin: 1rem 1rem 1rem 0;
     border: none;
-    font-size: .8rem;
+    font-size: .7rem;
     padding: .5rem 1rem;
+    border: 1px solid white;
+    color: white;
   }
   :-webkit-full-screen #controls {
     display: none;
@@ -206,6 +209,23 @@
     width: 100%;
     opacity: .5;
   }
+  #camera {
+    position: absolute !important;
+    width: 200px;
+    z-index: 99;
+    top: 1rem;
+    left: 1rem;
+  }
+  #camera.visible {
+    display: block;
+    z-index: 99999;
+  }
+  #camera > video {
+    width: 200px;
+  }
+  #camera #overlay {
+    display: none;
+  }
   </style>
 
   <script>
@@ -241,6 +261,13 @@
         $("#graph").addClass("visible");
       }
     }
+    function toggleCam() {
+      if($("#camera").hasClass("visible")) {
+        $("#camera").removeClass("visible");
+      } else {
+        $("#camera").addClass("visible");
+      }
+    }
   </script>
 
 </head>
@@ -251,7 +278,8 @@
     <div class="progress" id="loader">
       <div class="indeterminate"></div>
     </div>
-    <div style="position: relative" class="margin">
+
+    <div id="camera" style="position: relative" class="margin">
       <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
       <canvas id="overlay" />
     </div>
@@ -261,6 +289,7 @@
     </div>
 
     <div id="controls">
+      <button onClick="toggleCam()">Toggle cam</button>
       <button onClick="toggleGraph()">Toggle graph</button>
       <button onClick="openFullscreen()">Full screen</button>
     </div>
