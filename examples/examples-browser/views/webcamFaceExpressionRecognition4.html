@@ -62,40 +62,36 @@
 
         var total;
 
-        var addition = $("#emotion_happy").val();
-        if(addition) {
-          total = parseFloat(dps_happy) + parseFloat(addition);
-          dps_happy = total;	
-        }			
-        var addition = $("#emotion_sad").val();
-        if(addition) {
-          total = parseFloat(dps_sad) + parseFloat(addition);
-          dps_sad = total;	
-        }			
-        var addition = $("#emotion_surprised").val();
-        if(addition) {
-          total = parseFloat(dps_surprised) + parseFloat(addition);
-          dps_surprised = total;	
-        }			
-        var addition = $("#emotion_angry").val();
-        if(addition) {
-          total = parseFloat(dps_angry) + parseFloat(addition);
-          dps_angry = total;	
-        }			
-        var addition = $("#emotion_fearful").val();
-        if(addition) {
-          total = parseFloat(dps_fearful) + parseFloat(addition);
-          dps_fearful = total;	
-        }			
-        var addition = $("#emotion_disgusted").val();
-        if(addition) {
-          total = parseFloat(dps_disgusted) + parseFloat(addition);
-          dps_disgusted = total;	
-        }			
-        var addition = $("#emotion_neutral").val();
-        if(addition) {
-          total = parseFloat(dps_neutral) + parseFloat(addition);
-          dps_neutral = total;	
+        if($("#face_detected").val("true")) {
+
+          var addition = $("#emotion_happy").val();
+          if(addition) {
+            dps_happy = parseFloat(dps_happy) + parseFloat(addition);
+          }			
+          var addition = $("#emotion_sad").val();
+          if(addition) {
+            dps_sad = parseFloat(dps_sad) + parseFloat(addition);
+          }			
+          var addition = $("#emotion_surprised").val();
+          if(addition) {
+            dps_surprised = parseFloat(dps_surprised) + parseFloat(addition);	
+          }			
+          var addition = $("#emotion_angry").val();
+          if(addition) {
+            dps_angry = parseFloat(dps_angry) + parseFloat(addition);
+          }			
+          var addition = $("#emotion_fearful").val();
+          if(addition) {
+            dps_fearful = parseFloat(dps_fearful) + parseFloat(addition);
+          }			
+          var addition = $("#emotion_disgusted").val();
+          if(addition) {
+            dps_disgusted = parseFloat(dps_disgusted) + parseFloat(addition);
+          }			
+          var addition = $("#emotion_neutral").val();
+          if(addition) {
+            dps_neutral = parseFloat(dps_neutral) + parseFloat(addition);
+          }
         }
 
         dps.push({ y: dps_happy, indexLabel: "pleased" });
@@ -333,8 +329,15 @@
           $("#mainEmotionWrapper").addClass(primaryEmotion);
           $("#mainEmotion").html(primaryEmotion);
         }
-
         // console.log(result);
+      } else {
+        $("#emotion_happy").val('0');
+        $("#emotion_sad").val('0');
+        $("#emotion_neutral").val('0');
+        $("#emotion_calm").val('0');
+        $("#emotion_disgusted").val('0');
+        $("#emotion_angry").val('0');
+        $("#emotion_fearful").val('0');
       }
 
       if (result) {
