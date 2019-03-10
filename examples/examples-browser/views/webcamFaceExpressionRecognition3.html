@@ -22,34 +22,44 @@
       var dps_surprised = []; 
       var dps_disgusted = []; 
       var dps_fearful = []; 
-      var chart = new CanvasJS.Chart("chartContainer", {
+      var chart1 = new CanvasJS.Chart("chartContainer1", {
         backgroundColor: "transparent",
+        toolTip:{
+          enabled: false,
+        },
         axisY: {
           includeZero: true,
           minimum: 0,
           maximum: 1
         },      
         data: [{
-          type: "line",
-          dataPoints: dps_neutral
+          type: "spline",
+          dataPoints: dps_neutral,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_happy
+          type: "spline",
+          dataPoints: dps_happy,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_sad
+          type: "spline",
+          dataPoints: dps_sad,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_angry
+          type: "spline",
+          dataPoints: dps_angry,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_surprised
+          type: "spline",
+          dataPoints: dps_surprised,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_disgusted
+          type: "spline",
+          dataPoints: dps_disgusted,
+          lineThickness: 3
         },{
-          type: "line",
-          dataPoints: dps_fearful
+          type: "spline",
+          dataPoints: dps_fearful,
+          lineThickness: 3
         }]
       });
       
@@ -106,9 +116,7 @@
             x: xVal,
             y: yVal
           });
-
           xVal++;
-
         }
       
         if (dps_neutral.length > dataLength) {
@@ -121,7 +129,7 @@
           // dps_fearful.shift();
         }
       
-        chart.render();
+        chart1.render();
       };
       
       updateChart(dataLength);
@@ -218,9 +226,6 @@
   #graph.visible {
     display: block;
   }
-  #graph #chartContainer {
-    height: 50vh !important;
-  }
   </style>
 
   <script>
@@ -281,17 +286,18 @@
     </div>
 
     <div id="graph">
-      <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+      <div id="chartContainer1" style="height: 50vh; width: 100%;"></div>
+      <div id="chartContainer2" style="height: 50vh; width: 100%;"></div>
       <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     </div>
     
-    Neutral: <input type="text" id="emotion_neutral" value="" /><br />
-    Sad: <input type="text" id="emotion_sad" value="" /><br />
-    Angry: <input type="text" id="emotion_happy" value="" /><br />
-    Happy: <input type="text" id="emotion_angry" value="" /><br />
-    Surprised: <input type="text" id="emotion_surprised" value="" /><br />
-    Disgusted: <input type="text" id="emotion_disgusted" value="" /><br />
-    Fearful: <input type="text" id="emotion_fearful" value="" />
+    <input type="hidden" id="emotion_neutral" value="" /><br />
+    <input type="hidden" id="emotion_sad" value="" /><br />
+    <input type="hidden" id="emotion_happy" value="" /><br />
+    <input type="hidden" id="emotion_angry" value="" /><br />
+    <input type="hidden" id="emotion_surprised" value="" /><br />
+    <input type="hidden" id="emotion_disgusted" value="" /><br />
+    <input type="hidden" id="emotion_fearful" value="" />
 
   </body>
 

@@ -27,6 +27,7 @@ app.get('/webcam_face_landmark_detection', (req, res) => res.sendFile(path.join(
 app.get('/webcam_face_expression_recognition', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition.html')))
 app.get('/webcam_face_expression_recognition2', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition2.html')))
 app.get('/webcam_face_expression_recognition3', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition3.html')))
+app.get('/webcam_face_expression_recognition4', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition4.html')))
 app.get('/bbt_face_landmark_detection', (req, res) => res.sendFile(path.join(viewsDir, 'bbtFaceLandmarkDetection.html')))
 app.get('/bbt_face_similarity', (req, res) => res.sendFile(path.join(viewsDir, 'bbtFaceSimilarity.html')))
 app.get('/bbt_face_matching', (req, res) => res.sendFile(path.join(viewsDir, 'bbtFaceMatching.html')))

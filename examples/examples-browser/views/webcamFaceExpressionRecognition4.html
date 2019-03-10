@@ -12,6 +12,112 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Thasadith" rel="stylesheet">
 
+  <script>
+      window.onload = function () {
+      
+      var dps_neutral = 1.0; 
+      var dps_sad = 1.0; 
+      var dps_angry = 1.0; 
+      var dps_happy = 1.0; 
+      var dps_surprised = 1.0; 
+      var dps_disgusted = 1.0; 
+      var dps_fearful = 1.0; 
+
+      dps_happy = parseFloat(dps_happy).toFixed(3);
+
+      var dps = [
+        { y: dps_happy, indexLabel: "pleased" },
+        { y: dps_sad, indexLabel: "sad" },
+        { y: dps_surprised, indexLabel: "surprised" },
+        { y: dps_angry, indexLabel: "angry"},
+        { y: dps_fearful, indexLabel: "fearful" },
+        { y: dps_disgusted, indexLabel: "disgusted"},
+        { y: dps_neutral, indexLabel: "calm"}
+      ];
+      
+      var chart1 = new CanvasJS.Chart("chartContainer1", {
+        backgroundColor: "transparent",
+        toolTip:{
+          enabled: false,
+        },
+        axisY: {
+          includeZero: true,
+          minimum: 0,
+          maximum: 1
+        },      
+        data: [{
+          type: "pie",
+          showInLegend: false,
+          legendText: "{indexLabel}",
+          dataPoints: dps
+        }]
+      });
+      
+      var xVal = 0;
+      var yVal = 1; 
+      var updateInterval = 200;
+      var dataLength = 7; // number of datapoints visible at any point
+      
+      var updateChart = function () {
+
+        var total;
+
+        var addition = $("#emotion_happy").val();
+        if(addition) {
+          total = parseFloat(dps_happy) + parseFloat(addition);
+          dps_happy = total;	
+        }			
+        var addition = $("#emotion_sad").val();
+        if(addition) {
+          total = parseFloat(dps_sad) + parseFloat(addition);
+          dps_sad = total;	
+        }			
+        var addition = $("#emotion_surprised").val();
+        if(addition) {
+          total = parseFloat(dps_surprised) + parseFloat(addition);
+          dps_surprised = total;	
+        }			
+        var addition = $("#emotion_angry").val();
+        if(addition) {
+          total = parseFloat(dps_angry) + parseFloat(addition);
+          dps_angry = total;	
+        }			
+        var addition = $("#emotion_fearful").val();
+        if(addition) {
+          total = parseFloat(dps_fearful) + parseFloat(addition);
+          dps_fearful = total;	
+        }			
+        var addition = $("#emotion_disgusted").val();
+        if(addition) {
+          total = parseFloat(dps_disgusted) + parseFloat(addition);
+          dps_disgusted = total;	
+        }			
+        var addition = $("#emotion_neutral").val();
+        if(addition) {
+          total = parseFloat(dps_neutral) + parseFloat(addition);
+          dps_neutral = total;	
+        }
+
+        dps.push({ y: dps_happy, indexLabel: "pleased" });
+        dps.push({ y: dps_sad, indexLabel: "sad" });
+        dps.push({ y: dps_surprised, indexLabel: "surprised" });
+        dps.push({ y: dps_angry, indexLabel: "angry" });
+        dps.push({ y: dps_fearful, indexLabel: "fearful" });
+        dps.push({ y: dps_disgusted, indexLabel: "disgusted" });
+        dps.push({ y: dps_neutral, indexLabel: "calm" });
+
+        dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();
+      	
+      
+        chart1.render();
+        xVal++;
+      };
+      
+      updateChart(dataLength);
+      setInterval(function(){updateChart()}, updateInterval);
+      
+      }
+      </script>
 
 
   <style type='text/css'>
@@ -156,16 +262,22 @@
     </div>
 
     <div id="controls">
+      <button onClick="toggleGraph()">Toggle graph</button>
       <button onClick="openFullscreen()">Full screen</button>
     </div>
+
+    <div id="graph">
+      <div id="chartContainer1" style="height: 50vh; width: 100%;"></div>
+      <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    </div>
     
-    <input type="hidden" id="emotion_neutral" value="" /><br />
-    <input type="hidden" id="emotion_sad" value="" /><br />
-    <input type="hidden" id="emotion_happy" value="" /><br />
-    <input type="hidden" id="emotion_angry" value="" /><br />
-    <input type="hidden" id="emotion_surprised" value="" /><br />
-    <input type="hidden" id="emotion_disgusted" value="" /><br />
-    <input type="hidden" id="emotion_fearful" value="" />
+    <input type="text" id="emotion_neutral" value="" /><br />
+    <input type="text" id="emotion_sad" value="" /><br />
+    <input type="text" id="emotion_happy" value="" /><br />
+    <input type="text" id="emotion_angry" value="" /><br />
+    <input type="text" id="emotion_surprised" value="" /><br />
+    <input type="text" id="emotion_disgusted" value="" /><br />
+    <input type="text" id="emotion_fearful" value="" />
 
   </body>
 
