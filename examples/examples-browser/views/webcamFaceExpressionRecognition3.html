@@ -12,6 +12,128 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Thasadith" rel="stylesheet">
 
+  <script>
+      window.onload = function () {
+      
+      var dps_neutral = []; 
+      var dps_sad = []; 
+      var dps_angry = []; 
+      var dps_happy = []; 
+      var dps_surprised = []; 
+      var dps_disgusted = []; 
+      var dps_fearful = []; 
+      var chart = new CanvasJS.Chart("chartContainer", {
+        backgroundColor: "transparent",
+        title: {
+          // text: "Dynamic Data"
+        },
+        axisY: {
+          includeZero: true,
+          minimum: 0,
+          maximum: 1
+        },      
+        data: [{
+          type: "line",
+          dataPoints: dps_neutral
+        },{
+          type: "line",
+          dataPoints: dps_happy
+        },{
+          type: "line",
+          dataPoints: dps_sad
+        },{
+          type: "line",
+          dataPoints: dps_angry
+        },{
+          type: "line",
+          dataPoints: dps_surprised
+        },{
+          type: "line",
+          dataPoints: dps_disgusted
+        },{
+          type: "line",
+          dataPoints: dps_fearful
+        }]
+      });
+      
+      var xVal = 0;
+      var yVal = 1; 
+      var updateInterval = 200;
+      var dataLength = 50; // number of dataPoints visible at any point
+      
+      var updateChart = function (count) {
+      
+        count = count || 1;
+      
+        for (var j = 0; j < count; j++) {
+
+          // add point: neutral
+          yVal = parseFloat($("#emotion_neutral").val());
+          dps_neutral.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: happy
+          yVal = parseFloat($("#emotion_happy").val());
+          dps_happy.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_sad").val());
+          dps_sad.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_angry").val());
+          dps_angry.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_surprised").val());
+          dps_surprised.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_disgusted").val());
+          dps_disgusted.push({
+            x: xVal,
+            y: yVal
+          });
+          // add point: sad
+          yVal = parseFloat($("#emotion_fearful").val());
+          dps_fearful.push({
+            x: xVal,
+            y: yVal
+          });
+
+          xVal++;
+
+        }
+      
+        if (dps_neutral.length > dataLength) {
+          dps_neutral.shift();
+          dps_happy.shift();
+          dps_sad.shift();
+          dps_angry.shift();
+          dps_disgusted.shift();
+          dps_surprised.shift();
+          dps_fearful.shift();
+        }
+      
+        chart.render();
+      };
+      
+      updateChart(dataLength);
+      setInterval(function(){updateChart()}, updateInterval);
+      
+      }
+      </script>
+
+
   <style type='text/css'>
   html {
     overflow-y: hidden;
@@ -88,11 +210,23 @@
     color: white;
     font-size: 20vw !important;
   }
+  #graph {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50vh;
+    width: 100vw;
+    z-index: 9999;
+    transition: opacity 1s;
+    display: none;
+  }
+  #graph.visible {
+    display: block;
+  }
   </style>
 
   <script>
     var elem = document.documentElement;
-
     /* View in fullscreen */
     function openFullscreen() {
       if (elem.requestFullscreen) {
@@ -105,7 +239,6 @@
         elem.msRequestFullscreen();
       }
     }
-
     /* Close fullscreen */
     function closeFullscreen() {
       if (document.exitFullscreen) {
@@ -116,6 +249,13 @@
         document.webkitExitFullscreen();
       } else if (document.msExitFullscreen) { /* IE/Edge */
         document.msExitFullscreen();
+      }
+    }
+    function toggleGraph() {
+      if($("#graph").hasClass("visible")) {
+        $("#graph").removeClass("visible");
+      } else {
+        $("#graph").addClass("visible");
       }
     }
   </script>
@@ -135,9 +275,15 @@
 
     <div id="mainEmotionWrapper">
       <div id="controls">
-          <button onClick="openFullscreen()">Full screen</button>
+        <button onClick="toggleGraph()">Toggle graph</button>
+        <button onClick="openFullscreen()">Full screen</button>
       </div>
       <div id="mainEmotion"></div>
+    </div>
+
+    <div id="graph">
+      <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+      <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     </div>
     
     Neutral: <input type="text" id="emotion_neutral" value="" /><br />
