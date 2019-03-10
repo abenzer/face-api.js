@@ -32,11 +32,12 @@
         { y: dps_angry, indexLabel: "angry"},
         { y: dps_fearful, indexLabel: "fearful" },
         { y: dps_disgusted, indexLabel: "disgusted"},
-        { y: dps_neutral, indexLabel: "calm"}
+        { y: dps_neutral, indexLabel: "calm", color: "green"}
       ];
       
       var chart1 = new CanvasJS.Chart("chartContainer1", {
         backgroundColor: "transparent",
+        interactivityEnabled: false,
         toolTip:{
           enabled: false,
         },
@@ -46,7 +47,7 @@
           maximum: 1
         },      
         data: [{
-          type: "pie",
+          type: "doughnut",
           showInLegend: false,
           legendText: "{indexLabel}",
           dataPoints: dps
@@ -62,45 +63,42 @@
 
         var total;
 
-        if($("#face_detected").val("true")) {
-
-          var addition = $("#emotion_happy").val();
-          if(addition) {
-            dps_happy = parseFloat(dps_happy) + parseFloat(addition);
-          }			
-          var addition = $("#emotion_sad").val();
-          if(addition) {
-            dps_sad = parseFloat(dps_sad) + parseFloat(addition);
-          }			
-          var addition = $("#emotion_surprised").val();
-          if(addition) {
-            dps_surprised = parseFloat(dps_surprised) + parseFloat(addition);	
-          }			
-          var addition = $("#emotion_angry").val();
-          if(addition) {
-            dps_angry = parseFloat(dps_angry) + parseFloat(addition);
-          }			
-          var addition = $("#emotion_fearful").val();
-          if(addition) {
-            dps_fearful = parseFloat(dps_fearful) + parseFloat(addition);
-          }			
-          var addition = $("#emotion_disgusted").val();
-          if(addition) {
-            dps_disgusted = parseFloat(dps_disgusted) + parseFloat(addition);
-          }			
-          var addition = $("#emotion_neutral").val();
-          if(addition) {
-            dps_neutral = parseFloat(dps_neutral) + parseFloat(addition);
-          }
+        var addition = $("#emotion_happy").val();
+        if(addition) {
+          dps_happy = parseFloat(dps_happy) + parseFloat(addition);
+        }			
+        var addition = $("#emotion_sad").val();
+        if(addition) {
+          dps_sad = parseFloat(dps_sad) + parseFloat(addition);
+        }			
+        var addition = $("#emotion_surprised").val();
+        if(addition) {
+          dps_surprised = parseFloat(dps_surprised) + parseFloat(addition);	
+        }			
+        var addition = $("#emotion_angry").val();
+        if(addition) {
+          dps_angry = parseFloat(dps_angry) + parseFloat(addition);
+        }			
+        var addition = $("#emotion_fearful").val();
+        if(addition) {
+          dps_fearful = parseFloat(dps_fearful) + parseFloat(addition);
+        }			
+        var addition = $("#emotion_disgusted").val();
+        if(addition) {
+          dps_disgusted = parseFloat(dps_disgusted) + parseFloat(addition);
+        }			
+        var addition = $("#emotion_neutral").val();
+        if(addition) {
+          dps_neutral = parseFloat(dps_neutral) + parseFloat(addition);
         }
 
-        dps.push({ y: dps_happy, indexLabel: "pleased" });
-        dps.push({ y: dps_sad, indexLabel: "sad" });
-        dps.push({ y: dps_surprised, indexLabel: "surprised" });
-        dps.push({ y: dps_angry, indexLabel: "angry" });
-        dps.push({ y: dps_fearful, indexLabel: "fearful" });
-        dps.push({ y: dps_disgusted, indexLabel: "disgusted" });
-        dps.push({ y: dps_neutral, indexLabel: "calm" });
+        dps.push({ y: dps_happy, indexLabel: "pleased", color: "#77cc16" });
+        dps.push({ y: dps_sad, indexLabel: "sad", color: "#1652ba" });
+        dps.push({ y: dps_surprised, indexLabel: "surprised", color: "#25b0ba" });
+        dps.push({ y: dps_angry, indexLabel: "angry", color: "#b74316" });
+        dps.push({ y: dps_fearful, indexLabel: "fearful", color: "#333" });
+        dps.push({ y: dps_disgusted, indexLabel: "disgusted", color: "#3a2919" });
+        dps.push({ y: dps_neutral, indexLabel: "calm", color: "#ddd" });
 
         dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();dps.shift();
       	
